@@ -16,6 +16,17 @@ function App() {
     setLike(like + 1);
   }
 
+  function clickShow () {
+    setShow(!show);
+
+    if(show) {
+      setShow(false);
+    } else {
+      setShow(true);
+    }
+  }
+
+  console.log(onclick);
   return (
     <div className='App'>
       <div className='nav'>
@@ -33,7 +44,7 @@ function App() {
         <p>2025-07-16</p>
       </div>
       <div className="list">
-        <h4>{boardTitle[2]}</h4>
+        <h4 onClick={ clickShow }>{boardTitle[2]}</h4>
         <p>2025-07-16</p>
       </div>
 
