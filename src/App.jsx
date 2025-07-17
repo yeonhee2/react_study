@@ -9,21 +9,13 @@ function App() {
  // useXXX : 리엑트 내장함수 ( 리엑트 훅 )
   const [title, setTitle] = useState('상품목록'); 
   const [boardTitle, setBoardTitle] = useState(['React','HTML', 'CSS']);
-  const [like, setLike] = useState(0);
+  const [like, setLike] = useState([0,0,0]);
   const [show, setShow] = useState(false);
-  
+  // 몇번째 게시글을 클릭한지 저장
+  const [titleIndex, setTitleIndex] = useState(0);
+
   function change() {
     setLike(like + 1);
-  }
-
-  function clickShow () {
-    setShow(!show);
-
-    if(show) {
-      setShow(false);
-    } else {
-      setShow(true);
-    }
   }
 
   console.log(onclick);
@@ -35,18 +27,26 @@ function App() {
       <button onClick={() => {
         setTitle('게시판')
       }}>제목바꾸기</button>
-      <div className="list">
-        <h4>{boardTitle[0]} <button onClick={change}>좋아요</button> {like} </h4>
-        <p>2025-07-16</p>
-      </div>
-      <div className="list">
-        <h4>{boardTitle[1]}</h4>
-        <p>2025-07-16</p>
-      </div>
-      <div className="list">
-        <h4 onClick={ clickShow }>{boardTitle[2]}</h4>
-        <p>2025-07-16</p>
-      </div>
+
+      {
+        boardTitle.map((title, i) => {
+          return (
+            <div className="list" key={i}>
+              <h4 onClick={() => {
+                setShow(!show)
+                setTitleIndex(i);
+              }}>{title} <button onClick={(e) => {
+                // 버블링때문에 안걸리게 하는걸 안 하면 부모이벤트꺼까지 같이 나옴
+                e.stopPropagation();
+                let _like = [...like];
+                _like[i] = _like[i]+1;
+                setLike(_like);
+              }}>좋아요</button> {like[i]} </h4>
+              <p>2025-07-16</p>
+           </div>     
+          )
+        })
+      }
 
       <button onClick={ () => {
         // setBoardTitle(['Java','HTML', 'CSS']);
@@ -59,7 +59,7 @@ function App() {
       {/* 꼭 자동완성해야함 import가 생성되어야함 */}
 
       {
-        show ? <Detail /> : ''
+        show ? <Detail boardTitle = {boardTitle} setBoardTitle={setBoardTitle} titleIndex = {titleIndex} /> : ''
         // show && <Detail /> 
       }
       
